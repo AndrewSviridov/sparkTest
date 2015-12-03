@@ -1,0 +1,16 @@
+package com.skcc;
+
+declare FactTest
+	@role( event )
+end 
+
+rule "preprocess sensor log"
+when 
+  accumulate ( 
+  	$d : Sensor() over window:time(1m), 
+  	$tot : count($d); 
+  	$tot > 0 
+  ) 
+then 
+  System.out.println( $tot ); 
+end 

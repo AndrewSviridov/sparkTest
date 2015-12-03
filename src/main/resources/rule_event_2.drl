@@ -1,0 +1,20 @@
+global java.util.Map map;
+ 
+declare Double
+@role(event)
+end
+ 
+declare window Streem
+    Double() over window:length( 200 )
+end
+ 
+rule "See"
+when
+    $a : Double() from accumulate (
+        $d: Double()
+            from window Streem,
+        sum( $d )
+    )
+then
+    System.out.println( "I have a sum " + $a );
+end

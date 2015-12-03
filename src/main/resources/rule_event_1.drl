@@ -1,0 +1,39 @@
+global java.util.Map map;
+ 
+declare Double
+@role(event)
+end
+
+declare Record
+@role(event)
+	name : String
+	age : int
+end
+
+
+declare window Streem
+    Double() over window:length(3)
+end
+ 
+rule "See"
+when
+    $a : Double() from accumulate (
+        $d: Double()
+            from window Streem,
+        sum( $d )
+    )
+then
+    System.out.println( "We have a sum " + $a );
+end
+
+rule "check minimum server configuration"
+dialect "mvel"
+when
+	accumulate ( 
+	  	$d : Record(age > 2) over window:length(2), 
+	  	$tot : count($d); 
+	  	$tot > 0 
+  ) 
+then
+	System.out.println("Record : " + $tot);
+end

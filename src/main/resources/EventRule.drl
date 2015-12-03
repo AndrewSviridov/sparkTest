@@ -1,0 +1,18 @@
+package com.skcc;
+   
+declare Double
+	@role(event)
+end
+ 
+declare window Streem
+    Double() over window:length( 10 )
+end
+ 
+rule "See"
+when
+    $a : Double() from accumulate (
+        $d: Double() from window Streem, sum( $d )
+    )
+then
+    System.out.println("We have a sum "  + $a );
+end
